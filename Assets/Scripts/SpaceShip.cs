@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Crashteroids
@@ -19,12 +17,16 @@ namespace Crashteroids
 
         [SerializeField] private GameObject bulletPrefab, bulletParent;
 
+        private float aliveFor;
+
+        private GameManager game;
         #endregion
 
         #region Start
         void Start()
         {
-            
+            aliveFor = 0;
+            game = FindObjectOfType<GameManager>();
         }
         #endregion
 
@@ -41,6 +43,8 @@ namespace Crashteroids
         #region Update
         void Update()
         {
+            aliveFor += Time.deltaTime;
+
             timer -= Time.deltaTime;
 
             if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
@@ -77,7 +81,7 @@ namespace Crashteroids
         {
             if (timer <= 0)
             {
-                Vector3 position = new Vector3(transform.position.x, transform.position.y);
+                Vector3 position = new Vector3(transform.position.x, transform.position.y,-1f);
                 Transform parent = bulletParent.transform;
                 Instantiate(bulletPrefab, position, Quaternion.identity, parent);
                 timer = coolDown;
@@ -86,6 +90,7 @@ namespace Crashteroids
         private void Crash()
         {
             Debug.Log("crashed");
+            game.EndGame(aliveFor);
         }
         #endregion
     }

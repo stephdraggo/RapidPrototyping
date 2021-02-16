@@ -8,12 +8,13 @@ using UnityEngine.TestTools;
 
 public class TestScript
 {
+    
     [UnityTest]
     public IEnumerator TestScriptWithEnumeratorPasses()
     {
         GameObject gamePrefab = MonoBehaviour.Instantiate(Resources.Load<GameObject>("game"));
 
-        
+       
 
         yield return null;
     }

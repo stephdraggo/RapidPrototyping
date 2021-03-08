@@ -7,7 +7,7 @@ namespace GyroGame
 {
     public class GameManager : MonoBehaviour
     {
-        [SerializeField] private Rigidbody bodyy;
+        [SerializeField] private Rigidbody ballBody;
 
         
         void Start()
@@ -22,7 +22,7 @@ namespace GyroGame
 
         void Update()
         {
-            bodyy.WakeUp();
+            ballBody.WakeUp();
         }
 
         public void ResetScene()

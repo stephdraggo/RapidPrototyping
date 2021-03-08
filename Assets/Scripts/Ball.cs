@@ -5,19 +5,25 @@ using UnityEngine.SceneManagement;
 
 namespace GyroGame
 {
-    public class GameManager : MonoBehaviour
+    public class Ball : MonoBehaviour
     {
         [SerializeField] private Rigidbody ballBody;
 
+        private ParticleSystem particles;
         
         void Start()
         {
-            
+            particles=GetComponent<ParticleSystem>();
         }
 
         private void OnTriggerEnter(Collider other)
         {
             ResetScene();
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            particles.Play();
         }
 
         void Update()

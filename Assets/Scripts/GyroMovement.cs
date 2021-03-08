@@ -22,7 +22,6 @@ namespace GyroGame
 
         private void FixedUpdate()
         {
-            
             gameObject.transform.rotation = new Quaternion(Mathf.Clamp(Input.gyro.attitude.x, minTurn, maxTurn), 0, Mathf.Clamp(Input.gyro.attitude.y, minTurn, maxTurn), gameObject.transform.rotation.w);
         }
     }

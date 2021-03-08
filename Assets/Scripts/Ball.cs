@@ -10,10 +10,13 @@ namespace GyroGame
         [SerializeField] private Rigidbody ballBody;
 
         private ParticleSystem particles;
-        
+        private ParticleSystem.MainModule module;
+
+
         void Start()
         {
             particles=GetComponent<ParticleSystem>();
+            module = particles.main;
         }
 
         private void OnTriggerEnter(Collider other)
@@ -23,7 +26,19 @@ namespace GyroGame
 
         private void OnCollisionEnter(Collision collision)
         {
-            particles.Play();
+            if (collision.gameObject.CompareTag("wall"))
+            {
+                module.loop = true;
+                particles.Play();
+            }
+        }
+
+        private void OnCollisionExit(Collision collision)
+        {
+            if (collision.gameObject.CompareTag("wall"))
+            {
+                module.loop = false;
+            }
         }
 
         void Update()

@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Itemising;
 using UnityEngine;
 
 public class GlobalVars : MonoBehaviour

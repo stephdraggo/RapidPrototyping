@@ -9,20 +9,19 @@ namespace Itemising
     [CreateAssetMenu(fileName = "new generic item", menuName = "Itemising/Generic Item")]
     public class ItemGeneric : ScriptableObject
     {
+        #region Variables
+
+        //-------------Public Properties-------------
         public ItemPassables Passables => passables;
-        public Sprite DefaultSprite => defaultSprite;
         public float WeightSingle => weight;
         public float WeightTotal => weight * amount;
 
-        public string DisplayWeight
-        {
-            get
-            {
+        public string DisplayWeight {
+            get {
                 string display = "";
                 display += amount;
                 display += " ";
-                switch (measurementType)
-                {
+                switch (measurementType) {
                     case MeasurementType.IntByName:
                         display += name;
                         if (amount != 1) display += "s";
@@ -44,15 +43,43 @@ namespace Itemising
             }
         }
 
-        [SerializeField] protected ItemPassables passables;
-        [SerializeField] protected Sprite defaultSprite;
-        [SerializeField] protected Sprite[] altSprites;
+        //--------------Serialised Protected-------------
+        [SerializeField]
+        protected ItemPassables passables;
+        [SerializeField]
+        protected bool allowAltSprites;
+        [SerializeField]
+        protected Sprite defaultSprite;
+        [SerializeField,Tooltip("Array of alternate sprites available for this item.")]
+        protected Sprite[] altSprites;
 
-        [SerializeField] protected int goldValue;
-        [SerializeField] protected float weight;
-        [SerializeField] protected float amount;
-        [SerializeField] protected MeasurementType measurementType;
-        [SerializeField] protected string unitSingle, unitMultiple;
+        [SerializeField]
+        protected int goldValue;
+        [SerializeField,Tooltip("Weight of a single item.")]
+        protected float weight;
+        [SerializeField]
+        protected float amount;
+        [SerializeField]
+        protected MeasurementType measurementType;
+        [SerializeField]
+        protected string unitSingle, unitMultiple;
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Get alt sprite at index if allowed by item, else get default sprite
+        /// </summary>
+        /// <param name="index">Optional parameter for getting alt sprite</param>
+        /// <returns>Sprite</returns>
+        public Sprite GetSprite(int index = -1) {
+            if (allowAltSprites && index >= 0 && index < altSprites.Length)
+                return altSprites[index];
+            return defaultSprite;
+        }
+
+        #endregion
     }
 
     [Serializable]
@@ -79,13 +106,13 @@ namespace Itemising
             pAmount,
             pMeasureType,
             pUnitSingle,
-            pUnitMultiple;
+            pUnitMultiple,
+            pAllowAltSprites;
 
-        private bool unfoldWeight, unfoldSprites, altSpritesEnabled;
+        private bool unfoldWeight, unfoldSprites;
         private Vector2 scrollPos;
 
-        private void OnEnable()
-        {
+        private void OnEnable() {
             pPassables = serializedObject.FindProperty("passables");
             pDefaultSprite = serializedObject.FindProperty("defaultSprite");
             pAltSprites = serializedObject.FindProperty("altSprites");
@@ -95,10 +122,10 @@ namespace Itemising
             pMeasureType = serializedObject.FindProperty("measurementType");
             pUnitSingle = serializedObject.FindProperty("unitSingle");
             pUnitMultiple = serializedObject.FindProperty("unitMultiple");
+            pAllowAltSprites = serializedObject.FindProperty("allowAltSprites");
         }
 
-        public override void OnInspectorGUI()
-        {
+        public override void OnInspectorGUI() {
             serializedObject.Update();
 
             //item id struct
@@ -112,22 +139,19 @@ namespace Itemising
             EditorGUILayout.BeginVertical(GUI.skin.box);
             {
                 unfoldSprites = EditorGUILayout.Foldout(unfoldSprites, "Sprites", true, EditorStyles.foldout);
-                if (unfoldSprites)
-                {
+                if (unfoldSprites) {
                     pDefaultSprite.objectReferenceValue = EditorGUILayout.ObjectField(pDefaultSprite.displayName,
                         pDefaultSprite.objectReferenceValue, typeof(Sprite), false);
 
-                    altSpritesEnabled = EditorGUILayout.Toggle("Allow alternate sprites", altSpritesEnabled);
-                    if (altSpritesEnabled)
-                    {
+                    EditorGUILayout.PropertyField(pAllowAltSprites);
+                    if (pAllowAltSprites.boolValue) {
                         pAltSprites.arraySize =
                             EditorGUILayout.IntField("Number of alternate sprites", pAltSprites.arraySize);
                         {
                             scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
                             {
                                 EditorGUILayout.BeginHorizontal();
-                                for (int i = 0; i < pAltSprites.arraySize; i++)
-                                {
+                                for (int i = 0; i < pAltSprites.arraySize; i++) {
                                     pAltSprites.GetArrayElementAtIndex(i).objectReferenceValue =
                                         EditorGUILayout.ObjectField("",
                                             pAltSprites.GetArrayElementAtIndex(i).objectReferenceValue, typeof(Sprite),
@@ -147,12 +171,10 @@ namespace Itemising
             EditorGUILayout.BeginVertical(GUI.skin.box);
             {
                 unfoldWeight = EditorGUILayout.Foldout(unfoldWeight, "Weight Info", true, EditorStyles.foldout);
-                if (unfoldWeight)
-                {
+                if (unfoldWeight) {
                     EditorGUILayout.PropertyField(pWeight);
                     EditorGUILayout.PropertyField(pMeasureType);
-                    switch ((MeasurementType) pMeasureType.enumValueIndex)
-                    {
+                    switch ((MeasurementType) pMeasureType.enumValueIndex) {
                         case MeasurementType.IntByName:
                             int amount = (int) pAmount.floatValue;
                             pAmount.floatValue = EditorGUILayout.IntField(pAmount.displayName, amount);

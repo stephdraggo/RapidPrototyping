@@ -12,8 +12,12 @@ namespace Itemising
         #region Variables
 
         //-------------Public Properties-------------
-        public ItemPassables Passables => passables;
+        //id, name, type
+        public int Id => id;
+        public string Name => name;
+        public ItemType Type => type;
         public float WeightSingle => weight;
+        //move weight calculations to individual item
         public float WeightTotal => weight * amount;
 
         public string DisplayWeight {
@@ -45,17 +49,20 @@ namespace Itemising
 
         //--------------Serialised Protected-------------
         [SerializeField]
-        protected ItemPassables passables;
+        protected ItemType type;
+        [SerializeField]
+        protected new string name;
+        [SerializeField]
+        protected int id;
         [SerializeField]
         protected bool allowAltSprites;
         [SerializeField]
         protected Sprite defaultSprite;
-        [SerializeField,Tooltip("Array of alternate sprites available for this item.")]
+        [SerializeField]
         protected Sprite[] altSprites;
-
         [SerializeField]
         protected int goldValue;
-        [SerializeField,Tooltip("Weight of a single item.")]
+        [SerializeField]
         protected float weight;
         [SerializeField]
         protected float amount;
@@ -82,13 +89,7 @@ namespace Itemising
         #endregion
     }
 
-    [Serializable]
-    public struct ItemPassables
-    {
-        public int id;
-        public string name;
-        public ItemType type;
-    }
+
 
 #if UNITY_EDITOR
 
@@ -98,7 +99,7 @@ namespace Itemising
     [CanEditMultipleObjects]
     public class ItemGenericEditor : Editor
     {
-        private SerializedProperty pPassables,
+        private SerializedProperty
             pDefaultSprite,
             pAltSprites,
             pGoldValue,
@@ -107,13 +108,15 @@ namespace Itemising
             pMeasureType,
             pUnitSingle,
             pUnitMultiple,
-            pAllowAltSprites;
+            pAllowAltSprites,
+            pType,
+            pId,
+            pName;
 
         private bool unfoldWeight, unfoldSprites;
         private Vector2 scrollPos;
 
         private void OnEnable() {
-            pPassables = serializedObject.FindProperty("passables");
             pDefaultSprite = serializedObject.FindProperty("defaultSprite");
             pAltSprites = serializedObject.FindProperty("altSprites");
             pGoldValue = serializedObject.FindProperty("goldValue"); //todo
@@ -123,15 +126,21 @@ namespace Itemising
             pUnitSingle = serializedObject.FindProperty("unitSingle");
             pUnitMultiple = serializedObject.FindProperty("unitMultiple");
             pAllowAltSprites = serializedObject.FindProperty("allowAltSprites");
+            pType = serializedObject.FindProperty("type");
+            pId = serializedObject.FindProperty("id");
+            pName = serializedObject.FindProperty("name");
         }
 
         public override void OnInspectorGUI() {
             serializedObject.Update();
 
-            //item id struct
+            //basic info
             EditorGUILayout.BeginVertical(GUI.skin.box);
             {
-                EditorGUILayout.PropertyField(pPassables);
+                EditorGUILayout.LabelField("Basic Info",EditorStyles.boldLabel);
+                EditorGUILayout.PropertyField(pName);
+                EditorGUILayout.PropertyField(pId);
+                EditorGUILayout.PropertyField(pType);
             }
             EditorGUILayout.EndVertical();
 
@@ -146,7 +155,7 @@ namespace Itemising
                     EditorGUILayout.PropertyField(pAllowAltSprites);
                     if (pAllowAltSprites.boolValue) {
                         pAltSprites.arraySize =
-                            EditorGUILayout.IntField("Number of alternate sprites", pAltSprites.arraySize);
+                            EditorGUILayout.IntField("Alternate sprites", pAltSprites.arraySize);
                         {
                             scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
                             {
@@ -170,7 +179,7 @@ namespace Itemising
             //weight
             EditorGUILayout.BeginVertical(GUI.skin.box);
             {
-                unfoldWeight = EditorGUILayout.Foldout(unfoldWeight, "Weight Info", true, EditorStyles.foldout);
+                unfoldWeight = EditorGUILayout.Foldout(unfoldWeight, "Weight", true, GlobalVars.Instance.myStyles[0]);
                 if (unfoldWeight) {
                     EditorGUILayout.PropertyField(pWeight);
                     EditorGUILayout.PropertyField(pMeasureType);

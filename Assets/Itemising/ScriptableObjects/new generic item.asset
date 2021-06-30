@@ -12,10 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08bd939c5bfad014c87e81549533af4f, type: 3}
   m_Name: new generic item
   m_EditorClassIdentifier: 
-  passables:
-    id: 0
-    name: gergrg
-    type: 3
+  type: 3
+  name: gsrthsr
+  id: 0
   allowAltSprites: 1
   defaultSprite: {fileID: 0}
   altSprites:

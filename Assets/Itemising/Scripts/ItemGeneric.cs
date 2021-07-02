@@ -14,7 +14,7 @@ namespace Itemising
         public string Name => name;
         public ItemType Type => type;
         public float WeightSingle => weightSingle;
-        
+
         //--------------Serialised Protected-------------
         //basics
         [SerializeField]
@@ -131,38 +131,37 @@ namespace Itemising
     public class ItemGenericEditor : Editor
     {
         private SerializedProperty
-            pDefaultSprite,
-            pAltSprites,
-            pValue,
             pValueFluctuates,
-            pValueLimits,
-            pWeight,
-            pMeasureType,
-            pUnitSingle,
-            pUnitMultiple,
             pAllowAltSprites,
+            pMeasurementType,
+            pDefaultSprite,
+            pUnitMultiple,
+            pValueLimits,
+            pAltSprites,
+            pUnitSingle,
+            pWeight,
+            pValue,
+            pName,
             pType,
-            pId,
-            pName;
+            pId;
 
         private bool unfoldMeasurements, unfoldSprites, unfoldBasic, unfoldValue;
         private Vector2 scrollPos;
 
         private void OnEnable() {
-            pDefaultSprite = serializedObject.FindProperty("defaultSprite");
-            pAltSprites = serializedObject.FindProperty("altSprites");
-            pValue = serializedObject.FindProperty("value");
             pValueFluctuates = serializedObject.FindProperty("valueFluctuates");
-            pValueLimits = serializedObject.FindProperty("valueLimits");
-            pWeight = serializedObject.FindProperty("weightSingle");
-            //pAmount = serializedObject.FindProperty("amount");
-            pMeasureType = serializedObject.FindProperty("measurementType");
-            pUnitSingle = serializedObject.FindProperty("unitSingle");
-            pUnitMultiple = serializedObject.FindProperty("unitMultiple");
             pAllowAltSprites = serializedObject.FindProperty("allowAltSprites");
+            pMeasurementType = serializedObject.FindProperty("measurementType");
+            pDefaultSprite = serializedObject.FindProperty("defaultSprite");
+            pUnitMultiple = serializedObject.FindProperty("unitMultiple");
+            pValueLimits = serializedObject.FindProperty("valueLimits");
+            pAltSprites = serializedObject.FindProperty("altSprites");
+            pUnitSingle = serializedObject.FindProperty("unitSingle");
+            pWeight = serializedObject.FindProperty("weightSingle");
+            pValue = serializedObject.FindProperty("value");
+            pName = serializedObject.FindProperty("name");
             pType = serializedObject.FindProperty("type");
             pId = serializedObject.FindProperty("id");
-            pName = serializedObject.FindProperty("name");
         }
 
         public override void OnInspectorGUI() {
@@ -171,9 +170,24 @@ namespace Itemising
             GUIStyle foldoutBold = GlobalVars.Instance.myStyles[0];
 
             //basic info
+            BasicInfoDisplay(foldoutBold);
+
+            //sprite
+            SpriteDisplay(foldoutBold);
+
+            //Value
+            ValueDisplay(foldoutBold);
+
+            //Measurement
+            MeasurementDisplay(foldoutBold);
+
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        private void BasicInfoDisplay(GUIStyle style) {
             EditorGUILayout.BeginVertical(GUI.skin.box);
             {
-                unfoldBasic = EditorGUILayout.Foldout(unfoldBasic, "Basic Info", true, foldoutBold);
+                unfoldBasic = EditorGUILayout.Foldout(unfoldBasic, "Basic Info", true, style);
                 if (unfoldBasic) {
                     EditorGUILayout.PropertyField(pName);
                     EditorGUILayout.PropertyField(pId);
@@ -181,11 +195,12 @@ namespace Itemising
                 }
             }
             EditorGUILayout.EndVertical();
+        }
 
-            //sprite
+        private void SpriteDisplay(GUIStyle style) {
             EditorGUILayout.BeginVertical(GUI.skin.box);
             {
-                unfoldSprites = EditorGUILayout.Foldout(unfoldSprites, "Sprites", true, foldoutBold);
+                unfoldSprites = EditorGUILayout.Foldout(unfoldSprites, "Sprites", true, style);
                 if (unfoldSprites) {
                     pDefaultSprite.objectReferenceValue = EditorGUILayout.ObjectField(pDefaultSprite.displayName,
                         pDefaultSprite.objectReferenceValue, typeof(Sprite), false);
@@ -213,32 +228,43 @@ namespace Itemising
                 }
             }
             EditorGUILayout.EndVertical();
+        }
 
-            //Value
+        private void ValueDisplay(GUIStyle style) {
             EditorGUILayout.BeginVertical(GUI.skin.box);
             {
-                unfoldValue = EditorGUILayout.Foldout(unfoldValue, "Value", true, foldoutBold);
+                unfoldValue = EditorGUILayout.Foldout(unfoldValue, "Value", true, style);
                 if (unfoldValue) {
                     EditorGUILayout.PropertyField(pValue);
                     EditorGUILayout.PropertyField(pValueFluctuates);
                     if (pValueFluctuates.boolValue) {
-                        //EditorGUILayout.PropertyField(pValueLimits);
-                        //show valueLimits, but not as a vector2
                         float x = EditorGUILayout.FloatField("Lower Limit", pValueLimits.vector2Value.x);
                         float y = EditorGUILayout.FloatField("Upper Limit", pValueLimits.vector2Value.y);
+                        
+                        int value = pValue.intValue; //get value once instead of 4 times
+                        if (x > value) {
+                            x = value;
+                            Debug.LogWarning("Lower limit must be equal to or less than base value.");
+                        }
+                        if (y < value) {
+                            y = value;
+                            Debug.LogWarning("Upper limit must be equal to or greater than base value.");
+                        }
+                        
                         pValueLimits.vector2Value = new Vector2(x, y);
                     }
                 }
             }
             EditorGUILayout.EndVertical();
+        }
 
-            //measurement
+        private void MeasurementDisplay(GUIStyle style) {
             EditorGUILayout.BeginVertical(GUI.skin.box);
             {
-                unfoldMeasurements = EditorGUILayout.Foldout(unfoldMeasurements, "Measure", true, foldoutBold);
+                unfoldMeasurements = EditorGUILayout.Foldout(unfoldMeasurements, "Measure", true, style);
                 if (unfoldMeasurements) {
-                    EditorGUILayout.PropertyField(pMeasureType);
-                    switch ((MeasurementType) pMeasureType.enumValueIndex) {
+                    EditorGUILayout.PropertyField(pMeasurementType);
+                    switch ((MeasurementType) pMeasurementType.enumValueIndex) {
                         case MeasurementType.CountByName:
                             break;
 
@@ -259,12 +285,9 @@ namespace Itemising
                         default:
                             throw new ArgumentOutOfRangeException();
                     }
-                    
-                    
                 }
             }
             EditorGUILayout.EndVertical();
-            serializedObject.ApplyModifiedProperties();
         }
     }
 

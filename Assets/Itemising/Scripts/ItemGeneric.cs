@@ -1,3 +1,13 @@
+//the following definitions allow and prevent certain functionality in this class
+//comment out the definition for each functionality which you:
+//----- do NOT want implemented in your system, or
+//----- want to use a DIFFERENT system for
+
+#define Sprites
+#define Value
+#define Measurement
+
+//don't touch these
 using System;
 using UnityEngine;
 using UnityEditor;
@@ -18,51 +28,56 @@ namespace Itemising
         //--------------Serialised Protected-------------
         //basics
         [SerializeField]
-        protected ItemType type;
+        protected ItemType type = ItemType.Misc;
         [SerializeField]
-        protected new string name;
+        protected new string name = "new item";
         [SerializeField]
-        protected int id;
-
+        protected int id = 0;
+#if Sprites
         //sprites
         [SerializeField]
-        protected bool allowAltSprites;
+        protected bool allowAltSprites = false;
         [SerializeField]
         protected Sprite defaultSprite;
         [SerializeField]
         protected Sprite[] altSprites;
-
+#endif
+#if Value
         //value
         [SerializeField]
-        protected int value;
+        protected int value = 0;
         [SerializeField]
-        protected bool valueFluctuates;
+        protected bool valueFluctuates = false;
         [SerializeField]
-        protected Vector2 valueLimits;
-
+        protected Vector2 valueLimits = Vector2.zero;
+#endif
+#if Measurement
         //measuring
         [SerializeField]
-        protected float weightSingle;
+        protected float weightSingle = 1;
         [SerializeField]
-        protected MeasurementType measurementType;
+        protected MeasurementType measurementType = MeasurementType.CountByVolume;
         [SerializeField]
-        protected string unitSingle, unitMultiple;
+        protected string unitSingle = "piece", unitMultiple = "pieces";
+#endif
 
         #endregion
 
         #region Methods
 
+#if Sprites
         /// <summary>
         /// Get alt sprite at index if allowed by item, else get default sprite
         /// </summary>
-        /// <param name="index">Optional parameter for getting alternate sprite</param>
+        /// <param name="index">Optional parameter for getting alternate sprite. Index out of bound will return default sprite.</param>
         /// <returns>Sprite</returns>
         public Sprite GetSprite(int index = -1) {
             if (allowAltSprites && index >= 0 && index < altSprites.Length)
                 return altSprites[index];
             return defaultSprite;
         }
-
+#endif
+#if Value
         /// <summary>
         /// Get value of item with modifier if allowed
         /// </summary>
@@ -85,13 +100,14 @@ namespace Itemising
 
             return Mathf.RoundToInt(returnValue);
         }
-
+#endif
+#if Measurement
         /// <summary>
-        /// Get pretty display text for an item. Includes amount, units (if applicable) and item name
+        /// Get pretty display text for measuring item. Includes amount, units (if applicable) and item name
         /// </summary>
         /// <param name="amount">how much/many of item</param>
         /// <returns>display-ready string</returns>
-        public string GetDisplayWeightOrAmount(float amount) {
+        public string GetDisplayMeasure(float amount) {
             string display = "";
             display += amount;
             display += " ";
@@ -100,13 +116,13 @@ namespace Itemising
                     display += name;
                     if (amount != 1) display += "s";
                     break;
-                case MeasurementType.CountByUnit:
+                case MeasurementType.CountByDiscreteUnit:
                     if (amount != 1) display += unitMultiple;
                     else display += unitSingle;
                     display += " of ";
                     display += name;
                     break;
-                case MeasurementType.ChunkByUnits:
+                case MeasurementType.CountByVolume:
                     display += unitSingle;
                     display += " of ";
                     display += name;
@@ -117,10 +133,27 @@ namespace Itemising
 
             return display;
         }
+#endif
 
         #endregion
     }
 
+    #region Enums
+    public enum ItemType
+    {
+        Food,
+        Scroll,
+        Gem,
+        Misc,
+    }
+
+    public enum MeasurementType
+    {
+        CountByName,
+        CountByDiscreteUnit,
+        CountByVolume,
+    }
+    #endregion
 
 #if UNITY_EDITOR
 
@@ -146,28 +179,37 @@ namespace Itemising
             pId;
 
         private bool unfoldMeasurements, unfoldSprites, unfoldBasic, unfoldValue;
+        
         private Vector2 scrollPos;
 
+        private GUIStyle foldoutBold;
+
         private void OnEnable() {
-            pValueFluctuates = serializedObject.FindProperty("valueFluctuates");
-            pAllowAltSprites = serializedObject.FindProperty("allowAltSprites");
-            pMeasurementType = serializedObject.FindProperty("measurementType");
-            pDefaultSprite = serializedObject.FindProperty("defaultSprite");
-            pUnitMultiple = serializedObject.FindProperty("unitMultiple");
-            pValueLimits = serializedObject.FindProperty("valueLimits");
-            pAltSprites = serializedObject.FindProperty("altSprites");
-            pUnitSingle = serializedObject.FindProperty("unitSingle");
-            pWeight = serializedObject.FindProperty("weightSingle");
-            pValue = serializedObject.FindProperty("value");
+            foldoutBold = GlobalVars.Instance.myStyles[0] ?? EditorStyles.foldout;
+            
             pName = serializedObject.FindProperty("name");
             pType = serializedObject.FindProperty("type");
             pId = serializedObject.FindProperty("id");
+#if Sprites
+            pAllowAltSprites = serializedObject.FindProperty("allowAltSprites");
+            pDefaultSprite = serializedObject.FindProperty("defaultSprite");
+            pAltSprites = serializedObject.FindProperty("altSprites");
+#endif
+#if Value
+            pValueFluctuates = serializedObject.FindProperty("valueFluctuates");
+            pValueLimits = serializedObject.FindProperty("valueLimits");
+            pValue = serializedObject.FindProperty("value");
+#endif
+#if Measurement
+            pMeasurementType = serializedObject.FindProperty("measurementType");
+            pUnitMultiple = serializedObject.FindProperty("unitMultiple");
+            pUnitSingle = serializedObject.FindProperty("unitSingle");
+            pWeight = serializedObject.FindProperty("weightSingle");
+#endif
         }
 
         public override void OnInspectorGUI() {
             serializedObject.Update();
-
-            GUIStyle foldoutBold = GlobalVars.Instance.myStyles[0];
 
             //basic info
             BasicInfoDisplay(foldoutBold);
@@ -181,7 +223,22 @@ namespace Itemising
             //Measurement
             MeasurementDisplay(foldoutBold);
 
+            //help
+            HelpDisplay();
+
             serializedObject.ApplyModifiedProperties();
+        }
+
+        private void HelpDisplay() {
+            string helpText1 =
+                "Each boxed out section (except Basic Info) can be removed or changed without affecting any other section.";
+            string helpText2 =
+                "If you do not want to use a particular functionality in your system, simply remove it by commenting out a single line of code.";
+            string helpText3 =
+                "To remove parts/functionality from this class, refer to the definitions at the top of the script.";
+            EditorGUILayout.HelpBox(helpText1, MessageType.Info);
+            EditorGUILayout.HelpBox(helpText2, MessageType.Info);
+            EditorGUILayout.HelpBox(helpText3, MessageType.Info);
         }
 
         private void BasicInfoDisplay(GUIStyle style) {
@@ -198,6 +255,7 @@ namespace Itemising
         }
 
         private void SpriteDisplay(GUIStyle style) {
+#if Sprites
             EditorGUILayout.BeginVertical(GUI.skin.box);
             {
                 unfoldSprites = EditorGUILayout.Foldout(unfoldSprites, "Sprites", true, style);
@@ -228,9 +286,11 @@ namespace Itemising
                 }
             }
             EditorGUILayout.EndVertical();
+#endif
         }
 
         private void ValueDisplay(GUIStyle style) {
+#if Value
             EditorGUILayout.BeginVertical(GUI.skin.box);
             {
                 unfoldValue = EditorGUILayout.Foldout(unfoldValue, "Value", true, style);
@@ -240,25 +300,28 @@ namespace Itemising
                     if (pValueFluctuates.boolValue) {
                         float x = EditorGUILayout.FloatField("Lower Limit", pValueLimits.vector2Value.x);
                         float y = EditorGUILayout.FloatField("Upper Limit", pValueLimits.vector2Value.y);
-                        
+
                         int value = pValue.intValue; //get value once instead of 4 times
                         if (x > value) {
                             x = value;
                             Debug.LogWarning("Lower limit must be equal to or less than base value.");
                         }
+
                         if (y < value) {
                             y = value;
                             Debug.LogWarning("Upper limit must be equal to or greater than base value.");
                         }
-                        
+
                         pValueLimits.vector2Value = new Vector2(x, y);
                     }
                 }
             }
             EditorGUILayout.EndVertical();
+#endif
         }
 
         private void MeasurementDisplay(GUIStyle style) {
+#if Measurement
             EditorGUILayout.BeginVertical(GUI.skin.box);
             {
                 unfoldMeasurements = EditorGUILayout.Foldout(unfoldMeasurements, "Measure", true, style);
@@ -268,7 +331,7 @@ namespace Itemising
                         case MeasurementType.CountByName:
                             break;
 
-                        case MeasurementType.CountByUnit:
+                        case MeasurementType.CountByDiscreteUnit:
                             EditorGUILayout.PropertyField(pWeight);
                             pUnitSingle.stringValue =
                                 EditorGUILayout.TextField("Unit of Measurement (Single)", pUnitSingle.stringValue);
@@ -276,7 +339,7 @@ namespace Itemising
                                 EditorGUILayout.TextField("Unit of Measurement (Multiple)", pUnitMultiple.stringValue);
                             break;
 
-                        case MeasurementType.ChunkByUnits:
+                        case MeasurementType.CountByVolume:
                             EditorGUILayout.PropertyField(pWeight);
                             pUnitSingle.stringValue =
                                 EditorGUILayout.TextField("Unit of Measurement", pUnitSingle.stringValue);
@@ -288,10 +351,12 @@ namespace Itemising
                 }
             }
             EditorGUILayout.EndVertical();
+#endif
         }
     }
 
     #endregion
 
 #endif
+    
 }

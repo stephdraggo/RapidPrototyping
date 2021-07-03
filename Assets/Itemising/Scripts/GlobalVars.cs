@@ -17,17 +17,3 @@ public class GlobalVars : MonoBehaviour
     }
 }
 
-public enum ItemType
-{
-    Food,
-    Scroll,
-    Gem,
-    Misc,
-}
-
-public enum MeasurementType
-{
-    CountByName,
-    CountByUnit,
-    ChunkByUnits,
-}

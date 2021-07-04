@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08bd939c5bfad014c87e81549533af4f, type: 3}
+  m_Name: 000Apple
+  m_EditorClassIdentifier: 
+  type: 0
+  name: Apple
+  id: 0
+  allowAltSprites: 0
+  defaultSprite: {fileID: 8633881525917383573, guid: 50eae3f5550cf944c9e02c3c1012ceb5, type: 3}
+  altSprites:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  value: 1
+  valueFluctuates: 1
+  valueLimits: {x: 1, y: 5}
+  weightSingle: 1
+  measurementType: 1
+  unitSingle: crate
+  unitMultiple: crates

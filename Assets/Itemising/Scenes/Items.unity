@@ -328,6 +328,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc892db5b4b0a394482b23e12f8bf22f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemManager: {fileID: 11400000, guid: 6d94976f95d66a544ad8a4fc3eefcd7b, type: 2}
   myStyles:
   - m_Name: FoldoutBold
     m_Normal:

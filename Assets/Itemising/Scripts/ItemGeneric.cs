@@ -2,7 +2,6 @@
 //comment out the definition for each functionality which you:
 //----- do NOT want implemented in your system, or
 //----- want to use a DIFFERENT system for
-
 #define Sprites
 #define Value
 #define Measurement
@@ -14,6 +13,29 @@ using UnityEditor;
 
 namespace Itemising
 {
+    #region Enums
+
+    /// <summary>
+    /// These types can be switch out for whatever item types you want to have in your project.
+    /// </summary>
+    public enum ItemType
+    {
+        Food,
+        Scroll,
+        Gem,
+        Misc,
+        Equipment,
+    }
+
+    public enum MeasurementType
+    {
+        CountByName,
+        CountByDiscreteUnit,
+        CountByVolume,
+    }
+
+    #endregion
+
     [CreateAssetMenu(fileName = "new generic item", menuName = "Itemising/Generic Item")]
     public class ItemGeneric : ScriptableObject
     {
@@ -137,24 +159,6 @@ namespace Itemising
 
         #endregion
     }
-
-    #region Enums
-    public enum ItemType
-    {
-        Food,
-        Scroll,
-        Gem,
-        Misc,
-    }
-
-    public enum MeasurementType
-    {
-        CountByName,
-        CountByDiscreteUnit,
-        CountByVolume,
-    }
-    #endregion
-
 #if UNITY_EDITOR
 
     #region Editor Scripts
@@ -179,14 +183,14 @@ namespace Itemising
             pId;
 
         private bool unfoldMeasurements, unfoldSprites, unfoldBasic, unfoldValue;
-        
+
         private Vector2 scrollPos;
 
         private GUIStyle foldoutBold;
 
         private void OnEnable() {
             foldoutBold = GlobalVars.Instance.myStyles[0] ?? EditorStyles.foldout;
-            
+
             pName = serializedObject.FindProperty("name");
             pType = serializedObject.FindProperty("type");
             pId = serializedObject.FindProperty("id");
@@ -249,6 +253,10 @@ namespace Itemising
                     EditorGUILayout.PropertyField(pName);
                     EditorGUILayout.PropertyField(pId);
                     EditorGUILayout.PropertyField(pType);
+
+                    string helpText =
+                        "Changing the available item types is easy: navigate to the ItemType enum in this class and replace the options with your own types.";
+                    EditorGUILayout.HelpBox(helpText, MessageType.Info);
                 }
             }
             EditorGUILayout.EndVertical();
@@ -358,5 +366,4 @@ namespace Itemising
     #endregion
 
 #endif
-    
 }

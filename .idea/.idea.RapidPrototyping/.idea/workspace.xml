@@ -19,6 +19,7 @@
     </file-type-list>
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Assets/Itemising/Scripts/ItemInstance.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/015079D9-A4EA-4F97-B438-1E694D2310C1/b1/68b2a0c0/Editor.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5406A456-CF73-4443-B3D0-2A7D123287F1/23/72a5c8b8/IComparer`1.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Itemising/Scripts/GlobalVars.cs" root0="FORCE_HIGHLIGHTING" />
@@ -32,6 +33,7 @@
       <option value="$PROJECT_DIR$/Assets/Itemising/Scripts/GlobalVars.cs" />
       <option value="$PROJECT_DIR$/Assets/Itemising/Scripts/ItemGeneric.cs" />
       <option value="$PROJECT_DIR$/Assets/Itemising/Scripts/ItemManager.cs" />
+      <option value="$PROJECT_DIR$/Assets/Itemising/Scripts/ItemInstance.cs" />
     </changedPaths>
   </component>
   <component name="ProjectId" id="1uKjh5XbeqcmMxCO2g1reUVFa3p" />
@@ -62,10 +64,10 @@
       <option name="USE_EXTERNAL_CONSOLE" value="0" />
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor &amp; Play" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="UNITY_ATTACH_AND_PLAY" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+    <configuration name="Attach to Unity Editor &amp; Play" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="UNITY_ATTACH_AND_PLAY" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="16368">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" />
+      <option name="pid" value="16368" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -98,6 +100,8 @@
       <workItem from="1625198074443" duration="2019000" />
       <workItem from="1625289907504" duration="5715000" />
       <workItem from="1625382106282" duration="3921000" />
+      <workItem from="1625458494426" duration="2852000" />
+      <workItem from="1625461412745" duration="245000" />
     </task>
     <servers />
   </component>

@@ -22,6 +22,8 @@ namespace BigBoi.PlayerController
 
         public KeyBindDefaults defaults;
 
+        public LayerMask walkable;
+
         #endregion
 
         #region Unity Methods (OnValidate - Awake)
@@ -38,6 +40,8 @@ namespace BigBoi.PlayerController
                 Destroy(gameObject);
                 return;
             }
+
+            
         }
 
         /// <summary>
@@ -46,6 +50,8 @@ namespace BigBoi.PlayerController
         private void Awake() {
             //validate again
             OnValidate();
+
+            
         }
 
         #endregion
@@ -185,10 +191,11 @@ namespace BigBoi.PlayerController
     [CustomEditor(typeof(StaticControllerInfo))]
     public class StaticControllerInfoEditor : Editor
     {
-        private SerializedProperty pDefaults;
+        private SerializedProperty pDefaults,pWalkable;
 
         private void OnEnable() {
             pDefaults = serializedObject.FindProperty("defaults");
+            pWalkable = serializedObject.FindProperty("walkable");
         }
 
         public override void OnInspectorGUI() {
@@ -196,7 +203,8 @@ namespace BigBoi.PlayerController
 
             EditorGUILayout.BeginVertical(GUI.skin.box);
             {
-                EditorGUILayout.PropertyField(pDefaults); //add tooltip in editorstuff custom inspector
+                EditorGUILayout.PropertyField(pDefaults);
+                EditorGUILayout.PropertyField(pWalkable);
             }
             EditorGUILayout.EndVertical();
 

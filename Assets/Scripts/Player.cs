@@ -1,23 +1,28 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
-    public float SpeedMod => (1 - coins / 100);
+    public float SpeedMod => Mathf.Max((1 - (float)coins / 100), 0.01f);
     public int damageCost = 50;
     public int coins = 0;
 
     [SerializeField]
     private GameObject winScreen, loseScreen, menuScreen;
 
+    [SerializeField]
+    private Text coinDisplay;
+
     private void Start() {
         Time.timeScale = 0;
         menuScreen.SetActive(true);
         winScreen.SetActive(false);
         loseScreen.SetActive(false);
+    }
+
+    private void Update() {
+        coinDisplay.text = "Coins: " + coins;
     }
 
     public void TakeDamage() {
@@ -52,7 +57,7 @@ public class Player : MonoBehaviour
         Time.timeScale = 1;
         menuScreen.SetActive(false);
     }
-    
+
 
     public void Reload() {
         SceneManager.LoadScene(0);

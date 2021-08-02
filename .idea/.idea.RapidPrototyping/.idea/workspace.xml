@@ -24,10 +24,12 @@
   </component>
   <component name="IdeDocumentHistory">
     <changedPaths>
-      <option value="$PROJECT_DIR$/Assets/BigBoi/CharacterControllers/GroundCheck.cs" />
-      <option value="$PROJECT_DIR$/Assets/Scripts/Interactable.cs" />
-      <option value="$PROJECT_DIR$/Assets/BigBoi/CharacterControllers/Controller2DComplex.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/Player.cs" />
+      <option value="$PROJECT_DIR$/Assets/BigBoi/CharacterControllers/Controller2DComplex.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/Interactable.cs" />
+      <option value="$PROJECT_DIR$/Assets/BigBoi/CharacterControllers/StaticControllerInfo.cs" />
+      <option value="$PROJECT_DIR$/Assets/BigBoi/CharacterControllers/GroundCheck.cs" />
+      <option value="$PROJECT_DIR$/Assets/BigBoi/CharacterControllers/ControllerBase.cs" />
     </changedPaths>
   </component>
   <component name="ProjectId" id="1vvbXt1aDIhjJmKo4fcDw62hu7G" />
@@ -45,10 +47,18 @@
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor &amp; Play">
-    <configuration name="Attach to Unity Editor &amp; Play" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="UNITY_ATTACH_AND_PLAY" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="13432">
+    <configuration name="Standalone Player" type="RunUnityExe" factoryName="Unity Executable">
+      <option name="EXE_PATH" value="$PROJECT_DIR$/Build/RapidPrototyping.exe" />
+      <option name="PROGRAM_PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="C:\Users\Stephane\Documents\GitHub\RapidPrototyping\Build" />
+      <option name="PASS_PARENT_ENVS" value="1" />
+      <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Attach to Unity Editor &amp; Play" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="UNITY_ATTACH_AND_PLAY" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="13432" />
+      <option name="pid" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -76,6 +86,7 @@
       <updated>1627445560415</updated>
       <workItem from="1627445578739" duration="1188000" />
       <workItem from="1627790613690" duration="6680000" />
+      <workItem from="1627943228656" duration="642000" />
     </task>
     <servers />
   </component>
@@ -92,13 +103,13 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/BigBoi/CharacterControllers/Controller2DComplex.cs</url>
-          <line>161</line>
+          <line>159</line>
           <properties documentPath="C:\Users\Stephane\Documents\GitHub\RapidPrototyping\Assets\BigBoi\CharacterControllers\Controller2DComplex.cs" initialLine="161" containingFunctionPresentation="method 'Speed'">
             <startOffsets>
-              <option value="4886" />
+              <option value="4859" />
             </startOffsets>
             <endOffsets>
-              <option value="4924" />
+              <option value="4897" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="3" />

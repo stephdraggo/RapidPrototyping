@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace BigBoi.PlayerController
@@ -117,7 +115,7 @@ namespace BigBoi.PlayerController
 
             while (timer > 0) {
                 float timeAsLerp = 1 - timer / jumpMaxTime;
-                float speedMultiplier = Mathf.Lerp(jumpForceMultiplier, 0, timeAsLerp);
+                float speedMultiplier = Mathf.Lerp(jumpForceMultiplier, 0, timeAsLerp) * player.SpeedMod;
 
                 upDownMovement = speedMultiplier;
 
@@ -139,13 +137,13 @@ namespace BigBoi.PlayerController
 
             yield return null;
             while (falling) {
-                upDownMovement = -(fallSpeedIncreaseMultiplier * (timer )); //gravity, modified by time
+                upDownMovement = -(fallSpeedIncreaseMultiplier * timer) / player.SpeedMod; //gravity, modified by time
                 upDownMovement *= Time.deltaTime;
 
                 timer += Time.deltaTime;
                 yield return null;
             }
-            
+
             upDownMovement = 0;
         }
 

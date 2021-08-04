@@ -10,9 +10,19 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Assets/Bees Nuts/Scripts/Hive.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Bees Nuts/Scripts/Swarm.cs" root0="FORCE_HIGHLIGHTING" />
+  </component>
   <component name="IdeDocumentHistory">
     <changedPaths>
+      <option value="$PROJECT_DIR$/Assets/Bees Nuts/Scripts/Hive.cs" />
+      <option value="$PROJECT_DIR$/Assets/Bees Nuts/Scripts/Swarm.cs" />
+      <option value="$PROJECT_DIR$/Assets/Bees Nuts/Scripts/DepositBox.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/Generic/SceneFlowManager.cs" />
+      <option value="$PROJECT_DIR$/Assets/Bees Nuts/Scripts/Player.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/BigBoi/StaticControllerInfo.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/BigBoi/ControllerBase.cs" />
     </changedPaths>
   </component>
   <component name="ProjectId" id="1wF1OaG8r7311Wh2nLB6YvVPWI0" />
@@ -65,7 +75,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1628039504997</updated>
-      <workItem from="1628039512910" duration="404000" />
+      <workItem from="1628039512910" duration="9172000" />
     </task>
     <servers />
   </component>

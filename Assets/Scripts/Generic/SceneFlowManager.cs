@@ -1,5 +1,7 @@
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class SceneFlowManager : MonoBehaviour
 {
@@ -7,8 +9,13 @@ public class SceneFlowManager : MonoBehaviour
 
     public static SceneFlowManager Instance;
 
+    public int points, winThreshold;
+
     [SerializeField]
     private GameObject winScreen, loseScreen, menuScreen;
+
+    [SerializeField]
+    private Image fill;
 
     #endregion
 
@@ -21,6 +28,22 @@ public class SceneFlowManager : MonoBehaviour
         menuScreen.SetActive(true);
         loseScreen.SetActive(false);
         winScreen.SetActive(false);
+        
+        UpdateFill();
+    }
+
+    public void UpdateFill() {
+        fill.fillAmount = (float) points / (float) winThreshold;
+    }
+
+    public void CheckEnd() {
+        UpdateFill();
+        if (points >= winThreshold) {
+            Win();
+        }
+        else if (points <= 0) {
+            Lose();
+        }
     }
 
     public void Win() {
@@ -40,5 +63,9 @@ public class SceneFlowManager : MonoBehaviour
 
     public void ReloadScene() {
         SceneManager.LoadScene(0);
+    }
+
+    public void Quit() {
+        Application.Quit();
     }
 }
